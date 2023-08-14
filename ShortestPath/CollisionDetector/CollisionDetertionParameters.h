@@ -4,7 +4,7 @@
 #include <MeshFrame/Memory/Array.h>
 #define PREALLOCATED_NUM_COLLISIONS 1
 
-namespace EBD {
+namespace SP {
 
     struct CollisionStatistics : public MF::BaseJsonConfig
     {

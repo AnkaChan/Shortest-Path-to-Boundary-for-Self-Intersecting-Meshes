@@ -1,0 +1,17 @@
+{
+	"allowCCD": false,
+	"allowDCD": false,
+	"centerShiftLevel": 0.009999999776482582,
+	"checkFeasibleRegion": true,
+	"checkTetTraverse": true,
+	"feasibleRegionEpsilon": 9.999999974752427e-07,
+	"handleSelfCollision": true,
+	"loopLessTraverse": false,
+	"maxSearchDistanceMultiplier": 1.5,
+	"rayTriIntersectionEPSILON": 9.9999998245167e-15,
+	"restPoseCloestPoint": false,
+	"shiftQueryPointToCenter": true,
+	"stopTraversingAfterPassingQueryPoint": true,
+	"tetrahedralTraverseForNonSelfIntersection": true,
+	"useStaticTraverse": true
+}

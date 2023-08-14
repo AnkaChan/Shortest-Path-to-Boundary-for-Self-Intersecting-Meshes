@@ -8,7 +8,7 @@
 
 
 
-namespace EBD {
+namespace SP {
 	class TriData
 	{
 	public:
@@ -182,7 +182,7 @@ namespace EBD {
 			return maxId;
 		}
 	};
-	inline bool EBD::TriTriIntersection::Intersect(IdType fVId1, IdType fVId2, IdType* fVIds1, IdType* fVIds2, const TVerticesMat& verts1, const TVerticesMat& verts2)
+	inline bool SP::TriTriIntersection::Intersect(IdType fVId1, IdType fVId2, IdType* fVIds1, IdType* fVIds2, const TVerticesMat& verts1, const TVerticesMat& verts2)
 	{
 		for (int iFV1 = 0; iFV1 < 3; iFV1++)
 		{

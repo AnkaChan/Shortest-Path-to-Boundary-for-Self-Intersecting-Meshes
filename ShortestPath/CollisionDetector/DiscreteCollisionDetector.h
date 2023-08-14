@@ -12,7 +12,7 @@
 
 #include "CollisionDetertionParameters.h"
 
-namespace EBD {
+namespace SP {
     struct TetMeshFEM;
     struct DiscreteCollisionDetector;
 

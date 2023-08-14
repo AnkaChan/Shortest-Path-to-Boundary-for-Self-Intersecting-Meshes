@@ -3,17 +3,17 @@
 #include <CuMatrix/Geometry/Geometry.h>
 #include "../TetMesh/TetMeshFEM.h"
 
-using namespace EBD;
+using namespace SP;
 using embree::Vec3fa;
 
 #define ABSOLUTE_RELAXIATION 0.f
 
-inline embree::Vec3fa EBD::loadVertexPos(TetMeshFEM* pTM, int32_t vId)
+inline embree::Vec3fa SP::loadVertexPos(TetMeshFEM* pTM, int32_t vId)
 {
     return embree::Vec3fa::loadu(pTM->mVertPos.col(vId).data());
 }
 
-inline embree::Vec3fa EBD::faceNormal(TetMeshFEM* pTM, int32_t faceId)
+inline embree::Vec3fa SP::faceNormal(TetMeshFEM* pTM, int32_t faceId)
 {
     embree::Vec3fa a = loadVertexPos(pTM, pTM->surfaceFacesTetMeshVIds(0, faceId)),
         b = loadVertexPos(pTM, pTM->surfaceFacesTetMeshVIds(1, faceId)),
@@ -43,7 +43,7 @@ inline embree::Vec3fa faceOrientedArea(TetMeshFEM* pTM, int32_t faceId)
 }
 
 
-Vec3fa EBD::closestPointTriangle(Vec3fa const& p, Vec3fa const& a, Vec3fa const& b, Vec3fa const& c,
+Vec3fa SP::closestPointTriangle(Vec3fa const& p, Vec3fa const& a, Vec3fa const& b, Vec3fa const& c,
     Vec3fa& baryCentrics, ClosestPointOnTriangleType& pointType)
 {
     const Vec3fa ab = b - a;
@@ -217,7 +217,7 @@ bool closestPointQueryFunc(RTCPointQueryFunctionArguments* args)
     // */
     ClosestPointOnTriangleType pointType;
     Vec3fa closestPtBarycentrics;
-    Vec3fa closestP = EBD::closestPointTriangle(queryPt, a, b, c, closestPtBarycentrics, pointType);
+    Vec3fa closestP = SP::closestPointTriangle(queryPt, a, b, c, closestPtBarycentrics, pointType);
     float d = embree::distance(queryPt, closestP);
     // printf_s("Queried triangle with distance: %f\n", d);
 
@@ -429,7 +429,7 @@ bool restPoseClosestPointQueryFunc(RTCPointQueryFunctionArguments* args)
 
     ClosestPointOnTriangleType pointType;
     Vec3fa closestPtBarycentrics;
-    Vec3fa closestP = EBD::closestPointTriangle(queryPt, a, b, c, closestPtBarycentrics, pointType);
+    Vec3fa closestP = SP::closestPointTriangle(queryPt, a, b, c, closestPtBarycentrics, pointType);
     float d = embree::distance(queryPt, closestP);
     
     if (d < args->query->radius)
@@ -459,13 +459,13 @@ bool restPoseClosestPointQueryFunc(RTCPointQueryFunctionArguments* args)
 }
 
 
-EBD::DiscreteCollisionDetector::DiscreteCollisionDetector(const CollisionDetectionParamters& in_params)
+SP::DiscreteCollisionDetector::DiscreteCollisionDetector(const CollisionDetectionParamters& in_params)
 	: params(in_params)
 {
 	
 }
 
-void EBD::DiscreteCollisionDetector::initialize(std::vector<std::shared_ptr<TetMeshFEM>> tMeshes)
+void SP::DiscreteCollisionDetector::initialize(std::vector<std::shared_ptr<TetMeshFEM>> tMeshes)
 {
 	tMeshPtrs = tMeshes;
 
@@ -537,7 +537,7 @@ void EBD::DiscreteCollisionDetector::initialize(std::vector<std::shared_ptr<TetM
 
 }
 
-void EBD::DiscreteCollisionDetector::updateBVH(RTCBuildQuality tetMeshSceneQuality, 
+void SP::DiscreteCollisionDetector::updateBVH(RTCBuildQuality tetMeshSceneQuality, 
     RTCBuildQuality surfaceSceneQuality, bool updateSurfaceScene)
 {
 
@@ -595,7 +595,7 @@ void EBD::DiscreteCollisionDetector::updateBVH(RTCBuildQuality tetMeshSceneQuali
     rtcCommitScene(tetMeshesScene);
 }
 
-bool EBD::DiscreteCollisionDetector::vertexCollisionDetection(int32_t vId, int32_t tMeshId, CollisionDetectionResult* pResult)
+bool SP::DiscreteCollisionDetector::vertexCollisionDetection(int32_t vId, int32_t tMeshId, CollisionDetectionResult* pResult)
 {
     RTCPointQueryContext context;
     rtcInitPointQueryContext(&context);
@@ -618,7 +618,7 @@ bool EBD::DiscreteCollisionDetector::vertexCollisionDetection(int32_t vId, int32
     return true;
 }
 
-bool EBD::DiscreteCollisionDetector::closestPointQuery(CollisionDetectionResult* pColResult, ClosestPointQueryResult* pClosestPtResult, bool computeClosestPointNormal)
+bool SP::DiscreteCollisionDetector::closestPointQuery(CollisionDetectionResult* pColResult, ClosestPointQueryResult* pClosestPtResult, bool computeClosestPointNormal)
 {
     TetMeshFEM* pTM = tMeshPtrs[pColResult->idTMQuery].get();
     RTCPointQuery query;
@@ -739,7 +739,7 @@ bool EBD::DiscreteCollisionDetector::closestPointQuery(CollisionDetectionResult*
     return true;
 }
 
-bool EBD::DiscreteCollisionDetector::checkFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t faceId,
+bool SP::DiscreteCollisionDetector::checkFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t faceId,
     ClosestPointOnTriangleType pointType, float feasibleRegionEpsilon)
 {
     bool inFeasibleRegion = true;
@@ -777,7 +777,7 @@ bool EBD::DiscreteCollisionDetector::checkFeasibleRegion(embree::Vec3fa& p, TetM
     return inFeasibleRegion;
 }
 
-void EBD::DiscreteCollisionDetector::computeNormal(CollisionDetectionResult& colResult, int32_t iIntersection, std::array<float, 3>& normalOut)
+void SP::DiscreteCollisionDetector::computeNormal(CollisionDetectionResult& colResult, int32_t iIntersection, std::array<float, 3>& normalOut)
 {
     ClosestPointOnTriangleType pointType = colResult.closestPointType[iIntersection];
     int32_t curVertID = colResult.idVQuery;
@@ -794,35 +794,35 @@ void EBD::DiscreteCollisionDetector::computeNormal(CollisionDetectionResult& col
 
     switch (pointType)
     {
-    case EBD::ClosestPointOnTriangleType::AtA:
+    case SP::ClosestPointOnTriangleType::AtA:
         surfaceVIdTMeshIndex = pIntersectedTM->surfaceFacesTetMeshVIds(0, closestFaceId);
         surfaceVIdSurfaceIndex = pIntersectedTM->surfaceFacesSurfaceMeshVIds(0, closestFaceId);
         pIntersectedTM->computeVertexNormal(surfaceVIdSurfaceIndex, normal);
 
         break;
-    case EBD::ClosestPointOnTriangleType::AtB:
+    case SP::ClosestPointOnTriangleType::AtB:
         surfaceVIdTMeshIndex = pIntersectedTM->surfaceFacesTetMeshVIds(1, closestFaceId);
         surfaceVIdSurfaceIndex = pIntersectedTM->surfaceFacesSurfaceMeshVIds(1, closestFaceId);
         pIntersectedTM->computeVertexNormal(surfaceVIdSurfaceIndex, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::AtC:
+    case SP::ClosestPointOnTriangleType::AtC:
         surfaceVIdTMeshIndex = pIntersectedTM->surfaceFacesTetMeshVIds(2, closestFaceId);
         surfaceVIdSurfaceIndex = pIntersectedTM->surfaceFacesSurfaceMeshVIds(2, closestFaceId);
         pIntersectedTM->computeVertexNormal(surfaceVIdSurfaceIndex, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::AtAB:
+    case SP::ClosestPointOnTriangleType::AtAB:
         pIntersectedTM->computeEdgeNormal(closestFaceId, 0, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::AtBC:
+    case SP::ClosestPointOnTriangleType::AtBC:
         pIntersectedTM->computeEdgeNormal(closestFaceId, 1, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::AtAC:
+    case SP::ClosestPointOnTriangleType::AtAC:
         pIntersectedTM->computeEdgeNormal(closestFaceId, 2, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::AtInterior:
+    case SP::ClosestPointOnTriangleType::AtInterior:
         pIntersectedTM->computeFaceNormal(closestFaceId, normal);
         break;
-    case EBD::ClosestPointOnTriangleType::NotFound:
+    case SP::ClosestPointOnTriangleType::NotFound:
         return;
         break;
     default:
@@ -836,7 +836,7 @@ void EBD::DiscreteCollisionDetector::computeNormal(CollisionDetectionResult& col
 
 
 
-bool EBD::checkEdgeFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t faceId, int32_t edgeId, int32_t edgeVId1, int32_t edgeVId2, float feasibleRegionEpsilon)
+bool SP::checkEdgeFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t faceId, int32_t edgeId, int32_t edgeVId1, int32_t edgeVId2, float feasibleRegionEpsilon)
 {
     //M::HEPtr pHE1 = M::edgeHalfedge(pE);
     //M::HEPtr pHE2 = M::halfedgeSym(M::edgeHalfedge(pE));
@@ -902,7 +902,7 @@ bool EBD::checkEdgeFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t fa
     return true;
 }
 
-bool EBD::checkVertexFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t vId, float feasibleRegionEpsilon)
+bool SP::checkVertexFeasibleRegion(embree::Vec3fa& p, TetMeshFEM* pTM, int32_t vId, float feasibleRegionEpsilon)
 {
     // skip feasible region filtering for inverted surface parts
     // if (!pTetM->DCDEnabled(pV->pTetMeshV))
