@@ -1,3 +1,6 @@
 [submodule "3rdParty/OneTBB"]
 	path = 3rdParty/OneTBB
 	url = git@github.com:oneapi-src/oneTBB.git
+[submodule "3rdParty/MeshFrame2"]
+	path = 3rdParty/MeshFrame2
+	url = git@github.com:AnkaChan/MeshFrame2.git

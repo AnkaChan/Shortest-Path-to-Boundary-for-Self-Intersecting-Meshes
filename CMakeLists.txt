@@ -3,7 +3,7 @@ project (Shortest-Path-Test)
 
 
 find_package(Eigen3 REQUIRED)
-find_package(MeshFrame2 REQUIRED PATHS "./3rdParty/MeshFrame2" )
+find_package(MeshFrame2 REQUIRED PATHS "./3rdParty/MeshFrame/cmake" )
 find_package(embree 3.0 REQUIRED)
 
 set(THIRD_PARTY_INCLUDE_DIRS
