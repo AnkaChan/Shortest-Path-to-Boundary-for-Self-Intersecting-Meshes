@@ -8,7 +8,7 @@ Note that this is the code for the shortest path to surface algorithm. It does n
 ### Get the Code
 Please download the code using  the following command:
 ```
-git clone git@github.com:AnkaChan/Gaia.git --recursive
+git clone git@github.com:AnkaChan/Gaia.git --recursive
 ```
 
 ### Dependencies
