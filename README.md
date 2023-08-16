@@ -28,6 +28,11 @@ Use CMake to build the project and compile it. Currently, the code is only teste
 
 1. "tbb12.lib" is not found.  
 The reason of this bug is that Embree has already had a compilation of tbb, named tbb.lib. However, OneTBB is asking for a file called tbb12.lib. An easy solution is to duplicate that tbb.lib from embree, name it "tbb12.lib" and put it in the same repository.
+2. "Host key verification failed. fatal: Could not read from remote repository."  
+This issue could be that Github isn't present in your ~/.ssh/known_hosts file.
+Append GitHub to the list of authorized hosts:
+```ssh-keyscan -H github.com >> ~/.ssh/known_hosts```
+
 
 ## Test and Run
 After compilation, it should give you a binary file called: Shortest-Path-Test.
