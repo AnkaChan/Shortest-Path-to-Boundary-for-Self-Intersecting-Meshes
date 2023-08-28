@@ -17,7 +17,7 @@ This Algorithm has the following dependencies:
 - [CuMatrix](https://github.com/AnkaChan/CuMatrix/tree/main): for geometry and matrix computation (included as submodule)
 - OneTBB (included as a submodule)
 - Eigen3 (tested with 3.3.7)
-- Embree (tested with 3.13.3) Known issues exist for version >= 3.13.4.
+- Embree (tested with 3.13.1) Known issues exist for version >= 3.13.4.
 
 You need to install Eigen3 and Embree with the required version and add attributes: "Eigen3_DIR" and "embree_DIR" whose values are their corresponding config.cmake path to your environment variable to allow CMake to find them.
 
